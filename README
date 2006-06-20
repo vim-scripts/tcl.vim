@@ -1,0 +1,9 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=1578
+
+I am experimenting with updating the syntax file for Tcl. I have added more "keywords" and I have enable the syntax highlighting of an option flags starting with "-" (i.e. -padx, -text).
+
+Since Tcl doesn't officially have keywords they may need to be pared down since I added all of the Tcl and Tk commands from the Tcl wiki page.
+
+Note: This is basically just something I am working on and not for consumption. However, if you have suggestions or requests please email me.
+
+Note: You need to put "let tcl_extended_syntax=1" in your vimrc to get the extra OO syntax coloring. Otherwise you get the "standard" syntax coloring.
