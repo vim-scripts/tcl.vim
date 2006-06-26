@@ -4,6 +4,8 @@
 "		(previously Matt Neumann <mattneu@purpleturtle.com>)
 "		(previously Allan Kelly <allan@fruitloaf.co.uk>)
 " Original:	Robin Becker <robin@jessikat.demon.co.uk>
+" Modified: Robert Hicks <sigzero@gmail.com>
+" Helped: Tomasz Kalkosinski
 " Last Change:	2004 May 16
 "
 " Keywords TODO: format clock click anchor
@@ -41,11 +43,11 @@ syn keyword tclStatement    tcl_findLibrary tcl_startOfNextWord tcl_startOfPrevi
 syn keyword tclStatement    tcl_wordBreakAfter tcl_wordBreakBefore tell time trace
 syn keyword tclStatement    unknown unset update uplevel upvar vwait
 
-syn keyword tcltkStatement  bell bind bindtags button canvas checkbutton clipboard
+syn keyword tcltkStatement  bell bind bindtags canvas checkbutton clipboard
 syn keyword tcltkStatement  console destroy entry event focus font frame grab grid
 syn keyword tcltkStatement  image label labelframe listbox lower menu menubutton
-syn keyword tcltkStatement  message option pack panedwindow place radiobutton raise
-syn keyword tcltkStatement  scale scrollbar selection send spinbox text tk tk_bisque
+syn keyword tcltkStatement  message option panedwindow place radiobutton raise
+syn keyword tcltkStatement  scrollbar selection send spinbox text tk tk_bisque
 syn keyword tcltkStatement  tk_chooseColor tk_chooseDirectory tk_dialog tk_focusFollowsMouse
 syn keyword tcltkStatement  tk_focusNext tk_focusPrev tk_getOpenFile tk_getSaveFile
 syn keyword tcltkStatement  tk_menuSetFocus tk_messageBox tk_optionMenu tk_popup tk_setPalette
@@ -60,7 +62,16 @@ syn match tclVarRef "$\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
 	" ${...} may contain any character except '}'
 syn match tclVarRef "${[^}]*}"
 
-"syn match tclOptionMatcher "\%(^\|\s\)\zs-\w\+" contains=tclOptionStarter
+" These will match Snit and Tile namespaces
+syn match tclVarRef "ttk\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+syn match tclVarRef "snit\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+
+" These are Snit keywords
+syn keyword snitStatement   method constructor destructor delegate
+syn keyword snitStatement   pragma expose onconfigure oncget
+syn keyword snitStatement   component typecomponent typemethod
+
+" This matches options like: -text, -padx, -sticky etc.
 syn match tclOptionMatcher "\%(^\|\s\)\zs-[A-Za-z]\+" contains=tclOptionStarter
 syn match tclOptionStarter contained "-"
 
@@ -98,7 +109,7 @@ syn region tcltkCommand matchgroup=tcltkCommandColor start="\<expr\>" matchgroup
 
 " WIDGETS
 " commands associated with widgets
-syn keyword tcltkWidgetSwitch contained background highlightbackground insertontime cget
+syn keyword tcltkWidgetSwitch contained background highlightbackground insertontime
 syn keyword tcltkWidgetSwitch contained selectborderwidth borderwidth highlightcolor insertwidth
 syn keyword tcltkWidgetSwitch contained selectforeground cursor highlightthickness padx setgrid
 syn keyword tcltkWidgetSwitch contained exportselection insertbackground pady takefocus
@@ -162,6 +173,7 @@ syn region tcltkCommand matchgroup=tcltkCommandColor start="\<string\>" matchgro
 " ARRAY
 " commands associated with array
 syn keyword tcltkArraySwitch	contained	anymore donesearch exists get names nextelement size startsearch set
+
 " match from command name to ] or EOL
 syn region tcltkCommand matchgroup=tcltkCommandColor start="\<array\>" matchgroup=NONE skip="^\s*$" end="]\|[^\\]*\s*$"he=e-1  contains=tclLineContinue,tcltkArraySwitch,tclNumber,tclVarRef,tclString,tcltkCommand
 
@@ -204,21 +216,19 @@ syn match  tclNumber	"\<\d\+e[-+]\=\d\+[fl]\=\>"
 "hex number
 syn match  tclNumber	"0x[0-9a-f]\+\(u\=l\=\|lu\)\>"
 
-"Suggestion
+"TODO: clashes with the "-" option section
 "syn match  tclOperator "[~\-_+*<>\[\]{}=|#@$%&\\/:&\^\.,!?]"
 
 "syn match  tclIdentifier	"\<[a-z_][a-z0-9_]*\>"
 syn case match
 
-syn region tclComment	start="^\s*\#" skip="\\$" end="$" contains=tclTodo
+syn region tclComment   start="^\s*\#" skip="\\$" end="$" contains=tclTodo
 syn region tclComment	start=/;\s*\#/hs=s+1 skip="\\$" end="$" contains=tclTodo
 
 "proc folding
 syn region myFold start="^\z(\s*\)proc\s\(.*$\)\@=" end="^\z1}" transparent fold extend
 syn sync fromstart
 set foldmethod=syntax
-
-"syn sync ccomment tclComment
 
 " Define the default highlighting.
 " For version 5.7 and earlier: only when not done already
@@ -238,6 +248,7 @@ if version >= 508 || !exists("did_tcl_syntax_inits")
     HiLink tclNumber		    Number
     HiLink tclError		        Error
     HiLink tclStatement		    Statement
+    HiLink snitStatement        Statement
 
     "HiLink tclStatementColor	Statement
 
