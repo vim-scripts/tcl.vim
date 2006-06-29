@@ -6,9 +6,7 @@
 " Original:	Robin Becker <robin@jessikat.demon.co.uk>
 " Modified: Robert Hicks <sigzero@gmail.com>
 " Helped: Tomasz Kalkosinski
-" Last Change:	2004 May 16
-"
-" Keywords TODO: format clock click anchor
+" Last Change:	2006 June 27
 
 " For version 5.x: Clear all syntax items
 " For version 6.x: Quit when a syntax file was already loaded
@@ -31,8 +29,8 @@ syn keyword tclExceptions   catch error break return
 
 syn keyword tclStatement    after append auto_execok auto_import auto_load
 syn keyword tclStatement    auto_mkindex auto_mkindex_old auto_qualify auto_reset
-syn keyword tclStatement    bgerror binary cd clock close concat dde encoding eof
-syn keyword tclStatement    eval exec exit fblocked fconfigure fcopy file
+syn keyword tclStatement    bgerror binary cd chan clock close concat dde dict encoding
+syn keyword tclStatement    eof eval exec exit fblocked fconfigure fcopy file
 syn keyword tclStatement    fileevent flush gets glob global history http
 syn keyword tclStatement    incr info interp join lappend lindex linsert list
 syn keyword tclStatement    llength load lrange lreplace lsearch lset memory
@@ -58,7 +56,7 @@ syn keyword tcltkStatement  winfo wm
 " and the new 8.5 oo:: object frameworks
 "
 " TODO: rework after 8.5 comes out and oo:: is finalized
-syn keyword tclOOStatement  Class Object body class code common component constructor
+syn keyword tclOOStatement  Class class Object body code common component constructor
 syn keyword tclOOStatement  delegate destructor expose filters inherit instances instinvar
 syn keyword tclOOStatement  instproc isa itcl_class itcl_info local macro metaclass method
 syn keyword tclOOStatement  mixins oncget onconfigure parameters part pragma private
@@ -74,10 +72,12 @@ syn match tclVarRef "$\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
 syn match tclVarRef "${[^}]*}"
 
 " These will match the following namespaces: ttk::, snit::, itcl::, oo::
-syn match tclVarRef "ttk\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
-syn match tclVarRef "snit\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
-syn match tclVarRef "itcl\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
-syn match tclVarRef "oo\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+"
+" TODO: Need to create a region for ttk:: since it can occur between []{}""
+syn match tclOORef "^ttk\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+syn match tclOORef "^snit\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+syn match tclOORef "^itcl\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+syn match tclOORef "^oo\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
 
 " This matches options like: -text, -padx, -sticky etc.
 syn match tclOptionMatcher "\%(^\|\s\)\zs-[A-Za-z]\+" contains=tclOptionStarter
@@ -136,7 +136,7 @@ syn keyword tcltkWidgetSwitch contained closeenough confine scrollregion xscroll
 syn keyword tcltkWidgetSwitch contained indicatoron offvalue onvalue selectcolor selectimage state variable
 
 " entry, frame
-syn keyword tcltkWidgetSwitch contained show class colormap container visual
+syn keyword tcltkWidgetSwitch contained show colormap container visual
 
 " listbox, menu
 syn keyword tcltkWidgetSwitch contained selectmode postcommand selectcolor tearoff tearoffcommand title type
@@ -187,7 +187,7 @@ syn region tcltkCommand matchgroup=tcltkCommandColor start="\<array\>" matchgrou
 
 " LSORT
 " switches for lsort
-syn keyword tcltkLsortSwitch	contained	ascii dictionary integer real command increasing decreasing index
+syn keyword tcltkLsortSwitch contained  ascii dictionary integer real command increasing decreasing index
 
 " match from command name to ] or EOL
 syn region tcltkCommand matchgroup=tcltkCommandColor start="\<lsort\>" matchgroup=NONE skip="^\s*$" end="]\|[^\\]*\s*$"he=e-1  contains=tclLineContinue,tcltkLsortSwitch,tclNumber,tclVarRef,tclString,tcltkCommand
@@ -196,38 +196,38 @@ syn keyword tclTodo contained	TODO
 
 " String and Character contstants
 " Highlight special characters (those which have a backslash) differently
-syn match   tclSpecial contained "\\\d\d\d\=\|\\."
+syn match tclSpecial contained "\\\d\d\d\=\|\\."
 
 " A string needs the skip argument as it may legitimately contain \".
 " Match at start of line
-syn region  tclString   start=+^"+ end=+"+ contains=tclSpecial skip=+\\\\\|\\"+
+syn region tclString    start=+^"+ end=+"+ contains=tclSpecial skip=+\\\\\|\\"+
 
 "Match all other legal strings.
-syn region  tclString	start=+[^\\]"+ms=s+1  end=+"+ contains=tclSpecial skip=+\\\\\|\\"+
+syn region tclString    start=+[^\\]"+ms=s+1  end=+"+ contains=tclSpecial skip=+\\\\\|\\"+
 
-syn match  tclLineContinue "\\\s*$"
+syn match tclLineContinue "\\\s*$"
 
 "integer number, or floating point number without a dot and with "f".
 syn case ignore
 
-syn match  tclNumber	"\<\d\+\(u\=l\=\|lu\|f\)\>"
+syn match tclNumber	"\<\d\+\(u\=l\=\|lu\|f\)\>"
 
 "floating point number, with dot, optional exponent
-syn match  tclNumber		"\<\d\+\.\d*\(e[-+]\=\d\+\)\=[fl]\=\>"
+syn match tclNumber		"\<\d\+\.\d*\(e[-+]\=\d\+\)\=[fl]\=\>"
 
 "floating point number, starting with a dot, optional exponent
-syn match  tclNumber		"\.\d\+\(e[-+]\=\d\+\)\=[fl]\=\>"
+syn match tclNumber		"\.\d\+\(e[-+]\=\d\+\)\=[fl]\=\>"
 
 "floating point number, without dot, with exponent
-syn match  tclNumber	"\<\d\+e[-+]\=\d\+[fl]\=\>"
+syn match tclNumber	"\<\d\+e[-+]\=\d\+[fl]\=\>"
 
 "hex number
-syn match  tclNumber	"0x[0-9a-f]\+\(u\=l\=\|lu\)\>"
+syn match tclNumber	"0x[0-9a-f]\+\(u\=l\=\|lu\)\>"
 
 "TODO: clashes with the "-" option section
-"syn match  tclOperator "[~\-_+*<>\[\]{}=|#@$%&\\/:&\^\.,!?]"
+"syn match tclOperator "[~\-_+*<>\[\]{}=|#@$%&\\/:&\^\.,!?]"
 
-"syn match  tclIdentifier	"\<[a-z_][a-z0-9_]*\>"
+"syn match tclIdentifier	"\<[a-z_][a-z0-9_]*\>"
 syn case match
 
 syn region tclComment   start="^\s*\#" skip="\\$" end="$" contains=tclTodo
@@ -290,6 +290,7 @@ if version >= 508 || !exists("did_tcl_syntax_inits")
     HiLink tclExternal          Include
 
     HiLink tclOperator          Operator
+    HiLink tclOORef             Identifier
 
     delcommand HiLink
 endif
