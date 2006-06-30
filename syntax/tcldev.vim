@@ -1,12 +1,19 @@
 " Vim syntax file
-" Language:	TCL/TK
-" Maintainer:	Dean Copsey <copsey@cs.ucdavis.edu>
+" Language:	Tcl/Tk
+" Maintainer: Robert Hicks <sigzero@gmail.com>
+"       (previously Dean Copsey <copsey@cs.ucdavis.edu>)
 "		(previously Matt Neumann <mattneu@purpleturtle.com>)
 "		(previously Allan Kelly <allan@fruitloaf.co.uk>)
-" Original:	Robin Becker <robin@jessikat.demon.co.uk>
-" Modified: Robert Hicks <sigzero@gmail.com>
+"       (perviously Robin Becker <robin@jessikat.demon.co.uk>)
+"
 " Helped: Tomasz Kalkosinski
 " Last Change:	2006 June 27
+"
+" Note: If you want extended coloring for OO frameworks then put the
+"       following in your Vim rc file: let tcl_oo=1
+"
+"       I have this OFF for dev purposes
+"
 
 " For version 5.x: Clear all syntax items
 " For version 6.x: Quit when a syntax file was already loaded
@@ -23,6 +30,7 @@ syn keyword tclLabel		case default
 syn keyword tclConditional  if then else elseif switch
 syn keyword tclLooping		while for foreach break continue
 syn keyword tclExceptions   catch error break return
+
 
 " Things that I removed because they start one of regions below:
 " variable namespace expr format string array lsort
@@ -52,17 +60,6 @@ syn keyword tcltkStatement  tk_menuSetFocus tk_messageBox tk_optionMenu tk_popup
 syn keyword tcltkStatement  tk_textCopy tk_textCut tk_textPaste tkerror tkwait toplevel
 syn keyword tcltkStatement  winfo wm
 
-" This is an attempt to capture as much of the keywords from itcl, Snit, XOTcl
-" and the new 8.5 oo:: object frameworks
-"
-" TODO: rework after 8.5 comes out and oo:: is finalized
-syn keyword tclOOStatement  Class class Object body code common component constructor
-syn keyword tclOOStatement  delegate destructor expose filters inherit instances instinvar
-syn keyword tclOOStatement  instproc isa itcl_class itcl_info local macro metaclass method
-syn keyword tclOOStatement  mixins oncget onconfigure parameters part pragma private
-syn keyword tclOOStatement  protected public scope self subclasses super superclasses
-syn keyword tclOOStatement  type typecomponent typemethod typeof typevariable usual widget
-
 syn keyword tcltkSwitch	contained	insert create polygon fill outline tag
 
 " variable reference
@@ -71,13 +68,28 @@ syn match tclVarRef "$\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
 	" ${...} may contain any character except '}'
 syn match tclVarRef "${[^}]*}"
 
-" These will match the following namespaces: ttk::, snit::, itcl::, oo::
-"
-" TODO: Need to create a region for ttk:: since it can occur between []{}""
-syn match tclOORef "^ttk\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
-syn match tclOORef "^snit\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
-syn match tclOORef "^itcl\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
-syn match tclOORef "^oo\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+" This is all the OO stuff for Tcl
+"###if tcl_oo
+    " This is an attempt to capture as much of the keywords from itcl, Snit, XOTcl
+    " and the new 8.5 oo:: object frameworks
+    "
+    " TODO: rework after 8.5 comes out and oo:: is finalized
+    syn keyword tclOOStatement  Class class Object body code common component constructor
+    syn keyword tclOOStatement  delegate destructor expose filters inherit instances instinvar
+    syn keyword tclOOStatement  instproc isa itcl_class itcl_info local macro metaclass method
+    syn keyword tclOOStatement  mixins oncget onconfigure parameters part pragma private
+    syn keyword tclOOStatement  protected public scope self subclasses super superclasses
+    syn keyword tclOOStatement  type typecomponent typemethod typeof typevariable usual widget
+
+    " These will match the following namespaces: ttk::, snit::, itcl::, oo::
+    "
+    " TODO: These need to have a start anchor!
+    syn match tclOORef "^ttk\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+    syn match tclOORef "^snit\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+    syn match tclOORef "^itcl\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+    syn match tclOORef "^oo\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+"###:colo ps_color
+"endif
 
 " This matches options like: -text, -padx, -sticky etc.
 syn match tclOptionMatcher "\%(^\|\s\)\zs-[A-Za-z]\+" contains=tclOptionStarter
@@ -108,11 +120,11 @@ syn region tcltkCommand matchgroup=tcltkCommandColor start="\<namespace\>" match
 
 " EXPR
 " commands associated with expr
-syn keyword tcltkMaths	contained	acos	cos	hypot	sinh
-syn keyword tcltkMaths	contained	asin	cosh	log	sqrt
-syn keyword tcltkMaths	contained	atan	exp	log10	tan
-syn keyword tcltkMaths	contained	atan2	floor	pow	tanh
-syn keyword tcltkMaths	contained	ceil	fmod	sin
+syn keyword tcltkMaths	contained	acos cos hypot sinh
+syn keyword tcltkMaths	contained	asin cosh log sqrt
+syn keyword tcltkMaths	contained	atan exp log10 tan
+syn keyword tcltkMaths	contained	atan2 floor	pow	tanh
+syn keyword tcltkMaths	contained	ceil fmod sin
 syn region tcltkCommand matchgroup=tcltkCommandColor start="\<expr\>" matchgroup=NONE skip="^\s*$" end="]\|[^\\]*\s*$"me=e-1  contains=tclLineContinue,tcltkMaths,tclNumber,tclVarRef,tclString,tcltlWidgetSwitch,tcltkCommand,tcltkPackConf
 
 " WIDGETS
