@@ -1,9 +1,8 @@
 " Vim syntax file
 " Language:	    Tcl/Tk
 " Maintainer:   Robert Hicks <sigzero@gmail.com>
-" Last Change:  2006 Jul 07
-"
-" Version:      0.8
+" Last Change:  2006 Jul 11
+" Version:      0.9
 "
 " Prev Maintainers:
 "   Dean Copsey <copsey@cs.ucdavis.edu>
@@ -26,11 +25,11 @@ elseif exists("b:current_syntax")
 endif
 
 
-" ------------------------------
-"  OPTIONS
-" ------------------------------
+" --------------------------------
+"  OPTIONS <these go in your vimrc
+" --------------------------------
 "  let tcl_extended_syntax=0
-let tcl_extended_syntax=1
+"  let tcl_extended_syntax=1
 
 
 " ------------------------------
@@ -73,7 +72,7 @@ syn keyword tcltkSwitch	contained   insert create polygon fill outline tag
 " ------------------------------
 "  SYNTAX: Tcl Namespace Stuff
 " ------------------------------
-syn match tclNamespace "$\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+syn match tclNamespace "$\(\(::\)\?\([[:alnum:]_]*::\)*\)\a[a-zA-Z0-9_]*"
 " ${...} may contain any character except '}'
 syn match tclNamespace "${[^}]*}"
 
@@ -90,10 +89,10 @@ if tcl_extended_syntax
     syntax keyword ooKeyword  type typecomponent typemethod typeof typevariable usual widget
 
     " These will match the following namespaces: ttk::, snit::, itcl::, oo::
-    syntax match tclNamespace "ttk\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
-    syntax match tclNamespace "^snit\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
-    syntax match tclNamespace "^itcl\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
-    syntax match tclNamespace "^oo\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+    syntax match tclNamespace "\(ttk\)\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+    syntax match tclNamespace "\(^snit\)\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+    syntax match tclNamespace "\(^itcl\)\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
+    syntax match tclNamespace "\(^oo\)\(\(::\)\?\([[:alnum:]_.]*::\)*\)\a[a-zA-Z0-9_.]*"
 endif
 
 
@@ -185,7 +184,7 @@ syn region tcltkWidget matchgroup=tcltkWidgetColor start="\<button\>" matchgroup
 syn region tcltkWidget matchgroup=tcltkWidgetColor start="\<scale\>" matchgroup=NONE skip="^\s*$" end="]\|[^\\]*\s*$"he=e-1  contains=tclLineContinue,tcltkWidgetSwitch,tclString,tcltkSwitch,tclNumber,tclNamespace
 
 " PACK
-syn keyword tcltkPackSwitch	contained	forget info propogate slaves
+syn keyword tcltkPackSwitch	contained	forget info propagate slaves
 syn keyword tcltkPackConfSwitch	contained	after anchor before expand fill in ipadx ipady padx pady side
 syn region tcltkCommand matchgroup=tcltkCommandColor start="\<pack\>" matchgroup=NONE skip="^\s*$" end="]\|[^\\]*\s*$"he=e-1  contains=tclLineContinue,tcltkPackSwitch,tcltkPackConf,tcltkPackConfSwitch,tclNumber,tclNamespace,tclString,tcltkCommand keepend
 
