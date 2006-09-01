@@ -29,8 +29,8 @@ endif
 " --------------------------------
 "  OPTIONS <these go in your vimrc
 " --------------------------------
-"  let tcl_extended_syntax=0
-"  let tcl_extended_syntax=1
+"  let g:tcl_extended_syntax=0
+"  let g:tcl_extended_syntax=1
 
 
 " ------------------------------
@@ -77,7 +77,7 @@ syn match tclNamespace "$\(\(::\)\?\([[:alnum:]_]*::\)*\)\a[a-zA-Z0-9_]*"
 " ${...} may contain any character except '}'
 syn match tclNamespace "${[^}]*}"
 
-if tcl_extended_syntax
+if g:tcl_extended_syntax
     " This is an attempt to capture as much of the keywords from itcl, Snit, XOTcl
     " and the new 8.5 oo:: object frameworks
     "
