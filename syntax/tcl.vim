@@ -13,6 +13,7 @@
 " Helped in some way:
 "   Tomasz Kalkosinski
 "   Mark Smithfield
+"   Ilya Bobir
 "
 
 " ------------------------------
@@ -99,7 +100,7 @@ endif
 " ------------------------------
 "  OPTIONS: matches like -text, -padx, -fill
 " ------------------------------
-syn match tclOptionMatcher "\%(^\|\s\)\zs-[a-za-z]\+" contains=tclOptionStarter
+syn match tclOptionMatcher "\%(^\|\s\)\zs-[a-zA-Z]\+" contains=tclOptionStarter
 syn match tclOptionStarter contained "-"
 
 " match commands - 2 lines for pretty match.
@@ -212,11 +213,12 @@ syn match tclSpecial contained "\\\d\d\d\=\|\\."
 
 " A string needs the skip argument as it may legitimately contain \".
 " Match at start of line
-syn region tclString    start=+^"+ end=+"+ contains=tclSpecial skip=+\\\\\|\\"+
+"syn region tclString    start=+^"+ end=+"+ contains=tclSpecial skip=+\\\\\|\\"+
+syn region tclString    start=+^"+ end=+"+ contains=tclSpecial,tclLineContinue skip=+\\\\\|\\"+ extend
 
 " Match all other legal strings.
-syn region tclString    start=+[^\\]"+ms=s+1  end=+"+ contains=tclSpecial skip=+\\\\\|\\"+
-
+"syn region tclString    start=+[^\\]"+ms=s+1  end=+"+ contains=tclSpecial skip=+\\\\\|\\"+
+syn region tclString    start=+[^\\]"+ms=s+1  end=+"+ contains=tclSpecial,tclLineContinue skip=+\\\\\|\\"+ extend
 syn match tclLineContinue "\\\s*$"
 
 " integer number, or floating point number without a dot and with "f".
